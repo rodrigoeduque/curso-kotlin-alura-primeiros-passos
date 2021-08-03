@@ -1,29 +1,57 @@
 fun main() {
     println("Bem vindo ao ByteBank")
 
-    val contaAlex = Conta()
-    contaAlex.titular = "Alex"
-    contaAlex.numero = 1000
-    contaAlex.saldo = 200.00
-    println("Titular: ${contaAlex.titular}")
-    println("Numero Conta: ${contaAlex.numero}")
-    println("Saldo: ${contaAlex.saldo}")
+    val contaAlex = Conta("Alex", 1000)
 
+    val contaFran = Conta("Fran", 1001)
+
+//    contaAlex.deposita(1500.00)
+
+
+    contaFran.imprimeExtrato()
     println()
+    contaAlex.imprimeExtrato()
 
-    val contaFran = Conta()
-    contaFran.titular = "Fran"
-    contaFran.numero = 1001
-    contaFran.saldo = 300.00
-    println("Titular: ${contaFran.titular}")
-    println("Numero Conta: ${contaFran.numero}")
-    println("Saldo: ${contaFran.saldo}")
+
 }
 
-class Conta {
-    var titular = ""
-    var numero = 0
+class Conta(
+    val titular: String,
+    val numero: Int
+) {
     var saldo = 0.0
+        private set(value) {
+            if (value > 0) {
+                field = value
+            }
+        }
+
+    fun deposita(valor: Double) {
+        this.saldo += valor
+    }
+
+    fun saca(valor: Double) {
+        if (valor > this.saldo && valor > 0) println("Saldo insuficiente") else {
+            this.saldo -= valor
+        }
+    }
+
+    fun transfere(valor: Double, contaDestino: Conta): Boolean {
+        return if (valor > this.saldo && valor > 0) {
+            false
+        } else {
+            this.saca(valor)
+            contaDestino.deposita(valor)
+            true
+        }
+
+    }
+
+    fun imprimeExtrato() {
+        println("Nome: ${this.titular}")
+        println("Numero: ${this.numero}")
+        println("Saldo : ${this.saldo}")
+    }
 }
 
 private fun testeWhile() {
